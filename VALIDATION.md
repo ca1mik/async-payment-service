@@ -2,6 +2,21 @@
 
 Дата: 30 октября 2026 года. Среда: Windows, Python 3.12.10.
 
+## Полная проверка в GitHub Actions
+
+[Успешный прогон](https://github.com/ca1mik/async-payment-service/actions/runs/41035878798)
+для коммита `62372e3ddd005ec65aad374f27ba9d4d0e505fd7`:
+
+- `unit`: success; установка зависимостей, сборка пакета, Ruff и быстрые тесты.
+- `compose-integration`: success; Docker-образы собраны, PostgreSQL/RabbitMQ/API/consumer
+  запущены, Alembic применил миграцию, **38 passed in 14.32s**, пропусков нет.
+- Проверены конкурентные POST, реальная доставка webhook, три ошибки отправки,
+  публикация в DLX и `SKIP LOCKED` на PostgreSQL.
+
+Полный CI автоматически запускается при push и pull request.
+
+## Локальная проверка на Windows
+
 | Проверка | Результат |
 |---|---|
 | `pytest -q` | 35 passed, 3 skipped |
@@ -19,8 +34,8 @@
 2. Три неуспешные доставки webhook приводят к событию в `payments.dlx`.
 3. Уникальность и `FOR UPDATE SKIP LOCKED` на настоящем PostgreSQL.
 
-Docker отсутствует в среде подготовки. Сборка образов, применение миграции
-к настоящему PostgreSQL и запуск полного стека здесь не проверены.
+Docker отсутствует в локальной среде подготовки. Сборка образов, применение миграции
+к настоящему PostgreSQL и запуск полного стека проверены удалённо в CI, указанном выше.
 Разбор YAML не заменяет `docker compose config` или запуск контейнеров.
 Быстрые тесты используют SQLite и FastStream TestRabbitBroker; они не подтверждают
 сетевые гарантии RabbitMQ или поведение блокировок PostgreSQL.
