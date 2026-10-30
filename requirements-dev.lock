@@ -1,0 +1,11 @@
+# Resolved with Python 3.12.10; direct requirements are in pyproject.toml.
+-r requirements.lock
+aiosqlite==0.22.1
+colorama==0.4.6
+iniconfig==2.3.1
+packaging==26.3
+pluggy==1.7.0
+pygments==2.21.0
+pytest==9.2.0
+pytest-asyncio==1.4.1
+ruff==0.17.3

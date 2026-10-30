@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "async-payment-service"
+version = "1.0.0"
+description = "Asynchronous payments with transactional outbox and durable retries"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi==0.162.0",
+  "pydantic==2.14.2",
+  "pydantic-settings==2.16.2",
+  "sqlalchemy[asyncio]==2.0.55",
+  "asyncpg==0.32.0",
+  "faststream[rabbit]==0.6.7",
+  "alembic==1.20.1",
+  "httpx==0.28.1",
+  "uvicorn==0.54.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.2.0", "pytest-asyncio==1.4.1", "aiosqlite==0.22.1", "ruff==0.17.3"]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+markers = ["integration: requires PostgreSQL and RabbitMQ"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC"]
